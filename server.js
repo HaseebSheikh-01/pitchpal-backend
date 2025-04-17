@@ -4,7 +4,6 @@ const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 
-
 dotenv.config();
 
 const app = express();
@@ -40,6 +39,7 @@ db.sequelize.sync({ force: false, alter: true })
 // Import and use your routers
 app.use("/auth", require("./routes/authRouter")); // Authentication routes (signup/login)
 app.use("/api/users", require("./routes/userRouter")); // User profile and role management
+app.use("/api/startups", require("./routes/startupRouter")); // Startup routes (add, update, delete startups)
 
 // Test route
 app.get("/", (req, res) => {
