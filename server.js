@@ -40,6 +40,10 @@ db.sequelize.sync({ force: false, alter: true })
 app.use("/auth", require("./routes/authRouter")); // Authentication routes (signup/login)
 app.use("/api/users", require("./routes/userRouter")); // User profile and role management
 app.use("/api/startups", require("./routes/startupRouter")); // Startup routes (add, update, delete startups)
+<<<<<<< HEAD
+=======
+app.use("/api/investors", require("./routes/investorRouter")); // Investor routes (create, get, update investors) // Added this line
+>>>>>>> origin/creating-investor
 
 // Test route
 app.get("/", (req, res) => {
