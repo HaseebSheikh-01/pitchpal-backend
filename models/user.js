@@ -22,5 +22,14 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+
+  User.associate = (models) => {
+    User.hasMany(models.Investor, {
+      foreignKey: 'userId',
+      as: 'investors',  // This alias should match the relation in Investor
+    });
+  };
+
+
   return User;
 };

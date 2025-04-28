@@ -1,4 +1,4 @@
-// migrations/<timestamp>-create-startup.js
+// migrations/20250416234849-create-startup.js
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Startups', {
@@ -21,10 +21,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      category_list: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       funding_total_usd: {
         type: Sequelize.DECIMAL,
         allowNull: false,
@@ -33,31 +29,60 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      founded_at: {
-        type: Sequelize.DATEONLY,
+      continent: {
+        type: Sequelize.ENUM,
+        values: [
+          'North America',
+          'Europe',
+          'Asia',
+          'South America',
+          'Africa',
+          'Australia',
+        ],
         allowNull: false,
       },
-      first_funding_at: {
-        type: Sequelize.DATEONLY,
-        allowNull: true,
-      },
-      last_funding_at: {
-        type: Sequelize.DATEONLY,
-        allowNull: true,
-      },
-      country_code: {
+      country: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      region: {
-        type: Sequelize.STRING,
+      stage_of_business: {
+        type: Sequelize.ENUM,
+        values: [
+          'Seed',
+          'Bootstrap',
+          'Early Stage',
+          'Growth Stage',
+          'Late Stage',
+        ],
         allowNull: false,
       },
-      city: {
-        type: Sequelize.STRING,
+      industry: {
+        type: Sequelize.ENUM,
+        values: [
+          'Technology',
+          'Healthcare',
+          'Finance',
+          'Education',
+          'Energy',
+          'Retail',
+          'Manufacturing',
+          'Real Estate',
+          'AI & Machine Learning',
+          'E-commerce',
+          'Blockchain',
+          'Biotech',
+        ],
         allowNull: false,
       },
-      homepage_url: {
+      team_size: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      revenue_usd: {
+        type: Sequelize.DECIMAL,
+        allowNull: false,
+      },
+      image: {
         type: Sequelize.STRING,
         allowNull: true,
       },

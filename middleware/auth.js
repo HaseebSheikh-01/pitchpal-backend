@@ -1,9 +1,5 @@
 const jwt = require('jsonwebtoken');
-<<<<<<< HEAD
-const User = require('../models').User; // Sequelize User model
-=======
 const { User } = require('../models'); // Sequelize User model
->>>>>>> origin/creating-investor
 
 // Middleware to check for valid token
 module.exports = async (req, res, next) => {
@@ -14,34 +10,29 @@ module.exports = async (req, res, next) => {
   }
 
   try {
-    // Verify the token with the secret key
+    // Verify the token with the secret key (JWT_SECRET should be in your .env file)
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Attach the decoded user data to the request
-    req.user = decoded; // decoded contains the user id, role, and expiration time
+    // Attach the decoded user data (user id, role, expiration) to the request
+    req.user = decoded;
 
-<<<<<<< HEAD
-    // Check if the user exists in the database
-    const user = await User.findByPk(decoded.id);
-=======
-    // Fetch the user from the database to get the email
-    const user = await User.findByPk(decoded.id); // Use the userId from the JWT token to fetch the user from the User table
+    // Fetch the user from the database using the userId from the JWT token
+    const user = await User.findByPk(decoded.id); // Using the userId (decoded.id) from the JWT token to fetch the user
 
->>>>>>> origin/creating-investor
     if (!user) {
       return res.status(401).json({ message: 'User not found' });
     }
 
-<<<<<<< HEAD
-    // Proceed to the next middleware or route handler if the user exists
-=======
-    // Attach the email to the req.user object
-    req.user.email = user.email; // Fetch and attach email from User model
+    // Attach the email to the req.user object for easy access in further routes
+    req.user.email = user.email;
 
     // Proceed to the next middleware or route handler
->>>>>>> origin/creating-investor
     next();
   } catch (err) {
+    // Provide a more detailed error message, including whether the token expired or is invalid
+    if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ message: 'Token has expired' });
+    }
     res.status(401).json({ message: 'Invalid token', error: err.message });
   }
 };

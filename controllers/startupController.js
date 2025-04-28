@@ -1,43 +1,51 @@
-const { Startup } = require('../models'); // Import Startup model
+const { Startup, Investor } = require('../models'); // Import models
 
 // POST - Create a new startup
 exports.createStartup = async (req, res) => {
   const {
     name,
-    category_list,
     funding_total_usd,
     funding_rounds,
-    founded_at,
-    first_funding_at,
-    last_funding_at,
-    country_code,
-    region,
-    city,
-    homepage_url,
+    continent,
+    country,
+    stage_of_business,
+    industry,
+    team_size,
+    revenue_usd,
+    // image,
   } = req.body;
 
   // Extract userId from the authenticated user's JWT token
-  const userId = req.user.id; 
+  const userId = req.user.id;
 
   // Validation to ensure required fields are provided
-  if (!name || !category_list || !funding_total_usd || !funding_rounds) {
-    return res.status(400).json({ message: 'Missing required fields: name, category_list, funding_total_usd, or funding_rounds' });
+  if (
+    !name ||
+    !funding_total_usd ||
+    !funding_rounds ||
+    !continent ||
+    !country ||
+    !stage_of_business ||
+    !industry ||
+    !team_size ||
+    !revenue_usd
+  ) {
+    return res.status(400).json({ message: 'Missing required fields' });
   }
 
   try {
     // Create new startup with the provided data and the userId from the token
     const newStartup = await Startup.create({
       name,
-      category_list,
       funding_total_usd,
       funding_rounds,
-      founded_at,
-      first_funding_at,
-      last_funding_at,
-      country_code,
-      region,
-      city,
-      homepage_url,
+      continent,
+      country,
+      stage_of_business,
+      industry,
+      team_size,
+      revenue_usd,
+      // image,
       userId, // Set the userId as the owner of the startup
     });
 
@@ -64,7 +72,7 @@ exports.getStartupById = async (req, res) => {
 
   try {
     const startup = await Startup.findByPk(id); // Find startup by primary key (ID)
-    
+
     if (!startup) {
       return res.status(404).json({ message: 'Startup not found' });
     }
@@ -80,16 +88,15 @@ exports.updateStartup = async (req, res) => {
   const { id } = req.params;
   const {
     name,
-    category_list,
     funding_total_usd,
     funding_rounds,
-    founded_at,
-    first_funding_at,
-    last_funding_at,
-    country_code,
-    region,
-    city,
-    homepage_url,
+    continent,
+    country,
+    stage_of_business,
+    industry,
+    team_size,
+    revenue_usd,
+    image,
   } = req.body;
 
   try {
@@ -100,16 +107,15 @@ exports.updateStartup = async (req, res) => {
 
     // Update startup fields, keeping existing values if not provided
     startup.name = name || startup.name;
-    startup.category_list = category_list || startup.category_list;
     startup.funding_total_usd = funding_total_usd || startup.funding_total_usd;
     startup.funding_rounds = funding_rounds || startup.funding_rounds;
-    startup.founded_at = founded_at || startup.founded_at;
-    startup.first_funding_at = first_funding_at || startup.first_funding_at;
-    startup.last_funding_at = last_funding_at || startup.last_funding_at;
-    startup.country_code = country_code || startup.country_code;
-    startup.region = region || startup.region;
-    startup.city = city || startup.city;
-    startup.homepage_url = homepage_url || startup.homepage_url;
+    startup.continent = continent || startup.continent;
+    startup.country = country || startup.country;
+    startup.stage_of_business = stage_of_business || startup.stage_of_business;
+    startup.industry = industry || startup.industry;
+    startup.team_size = team_size || startup.team_size;
+    startup.revenue_usd = revenue_usd || startup.revenue_usd;
+    startup.image = image || startup.image;
 
     await startup.save();
     res.status(200).json({ message: 'Startup updated successfully', startup });

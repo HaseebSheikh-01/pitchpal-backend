@@ -11,71 +11,84 @@ module.exports = (sequelize, DataTypes) => {
       },
       onDelete: 'CASCADE',
     },
-
     // Startup name
     name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
-    // Comma-separated or tag-style categories
-    category_list: {
-      type: DataTypes.STRING, // You can also use ARRAY if you want to store as a list
-      allowNull: false,
-    },
-
     // Total funding raised in USD
     funding_total_usd: {
       type: DataTypes.DECIMAL,
       allowNull: false,
     },
-
     // Number of funding rounds
     funding_rounds: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-
-    // Date the startup was founded
-    founded_at: {
-      type: DataTypes.DATEONLY, // Use DATEONLY to avoid time info
+    // Continent
+    continent: {
+      type: DataTypes.ENUM,
+      values: [
+        'North America',
+        'Europe',
+        'Asia',
+        'South America',
+        'Africa',
+        'Australia',
+      ],
       allowNull: false,
     },
-
-    // Date of the first funding round
-    first_funding_at: {
-      type: DataTypes.DATEONLY, // Use DATEONLY for date without time
-      allowNull: true, // Nullable as not all startups may have a funding date
-    },
-
-    // Date of the latest funding round
-    last_funding_at: {
-      type: DataTypes.DATEONLY,
-      allowNull: true, // Nullable as not all startups may have had a recent round
-    },
-
-    // ISO country code
-    country_code: {
+    // Country name
+    country: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
-    // Region (state, province)
-    region: {
-      type: DataTypes.STRING,
+    // Stage of business
+    stage_of_business: {
+      type: DataTypes.ENUM,
+      values: [
+        'Seed',
+        'Bootstrap',
+        'Early Stage',
+        'Growth Stage',
+        'Late Stage',
+      ],
       allowNull: false,
     },
-
-    // City where the startup is based
-    city: {
-      type: DataTypes.STRING,
+    // Industry
+    industry: {
+      type: DataTypes.ENUM,
+      values: [
+        'Technology',
+        'Healthcare',
+        'Finance',
+        'Education',
+        'Energy',
+        'Retail',
+        'Manufacturing',
+        'Real Estate',
+        'AI & Machine Learning',
+        'E-commerce',
+        'Blockchain',
+        'Biotech',
+      ],
       allowNull: false,
     },
-
-    // Official website URL
-    homepage_url: {
+    // Team size
+    team_size: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    // Revenue in USD
+    revenue_usd: {
+      type: DataTypes.DECIMAL,
+      allowNull: false,
+    },
+    // Image URL or path
+    image: {
       type: DataTypes.STRING,
-      allowNull: true, // Nullable as not every startup may have a website
+      allowNull: true,
     },
   });
 

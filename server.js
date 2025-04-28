@@ -40,14 +40,17 @@ db.sequelize.sync({ force: false, alter: true })
 app.use("/auth", require("./routes/authRouter")); // Authentication routes (signup/login)
 app.use("/api/users", require("./routes/userRouter")); // User profile and role management
 app.use("/api/startups", require("./routes/startupRouter")); // Startup routes (add, update, delete startups)
-<<<<<<< HEAD
-=======
-app.use("/api/investors", require("./routes/investorRouter")); // Investor routes (create, get, update investors) // Added this line
->>>>>>> origin/creating-investor
+app.use("/api/investors", require("./routes/investorRouter")); // Investor routes (create, get, update investors)
+app.use("/api/investor", require("./routes/investorRouter")); // Updated investor routes for matching
 
 // Test route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to PitchPal API 🚀" });
+});
+
+// Error handling for undefined routes
+app.use((req, res) => {
+  res.status(404).json({ status: "error", message: "Route not found" });
 });
 
 // Start server

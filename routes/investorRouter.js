@@ -1,13 +1,17 @@
-// routes/investorRouter.js
 const express = require('express');
 const router = express.Router();
-const investorController = require('../controllers/investorController');
-const auth = require('../middleware/auth'); // Ensure the user is authenticated
+const investorController = require('../controllers/investorController'); // Make sure this import is correct
+const auth = require('../middleware/auth'); // Ensure the auth middleware is correctly imported
 
-// Create a new investor
+// Route for creating a new investor
 router.post('/', auth, investorController.createInvestor);
 
-// Get all investors
-router.get('/investors', auth, investorController.getInvestors);
+// Route for getting all investors
+router.get('/', auth, investorController.getInvestors);
+
+// Route for getting matching startups for a specific investor
+router.get('/matching-startups', auth, investorController.getMatchingStartups);
+
+// Other routes (preferences, matched startups, etc.)
 
 module.exports = router;
