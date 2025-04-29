@@ -14,7 +14,7 @@ exports.createInvestor = async (req, res) => {
   try {
     let {
       full_name,
-      // location,
+      location,
       company,
       position,
       funding_min,
@@ -22,7 +22,7 @@ exports.createInvestor = async (req, res) => {
       industry,
       area,
       type_of_startup,
-      // team_size,
+      team_size,
     } = req.body;
 
     // Ensure enum fields are strings, not arrays
@@ -43,7 +43,7 @@ exports.createInvestor = async (req, res) => {
       userId,
       full_name,
       email, // Use the email fetched from the User model
-      // location,
+      location,
       company,
       position,
       funding_min,
@@ -51,7 +51,7 @@ exports.createInvestor = async (req, res) => {
       industry,
       area,
       type_of_startup,
-      // team_size,
+      team_size,
     });
 
     return res.status(201).json({
@@ -81,32 +81,29 @@ exports.getInvestors = async (req, res) => {
   }
 };
 
-// Match investors with startups based on preferences
-exports.getMatchingStartups = async (req, res) => {
-  const { investorId } = req.query;
+// Match startups by userId
+exports.matchStartupsByUserId = async (req, res) => {
+  const { userId } = req.params;
   try {
-    const investor = await Investor.findByPk(investorId);
+    const investor = await Investor.findOne({ where: { userId } });
     if (!investor) {
-      return res.status(404).json({ status: 'error', message: 'Investor not found' });
+      return res.status(404).json({ message: 'Investor not found' });
     }
 
-    // Query startups based on the investor's preferences
     const startups = await Startup.findAll({
       where: {
-        // Match the categories using LIKE for string comparisons
-        category_list: { [Sequelize.Op.like]: `%${investor.industry}%` },
-        // Ensure funding is within the investor's range
-        funding_total_usd: { [Sequelize.Op.between]: [investor.funding_min, investor.funding_max] },
-        // Match by area
-        country: investor.area,
-        // Match by startup stage
+        funding_total_usd: {
+          [Sequelize.Op.between]: [investor.funding_min, investor.funding_max],
+        },
+        industry: investor.industry,
+        continent: investor.area,
         stage_of_business: investor.type_of_startup,
-      }
+      },
     });
 
-    return res.json({ status: 'success', data: startups });
+    return res.status(200).json({ startups });
   } catch (error) {
-    console.error('Error matching startups:', error.message);
-    return res.status(500).json({ status: 'error', message: 'Server error' });
+    console.error('Error matching startups:', error);
+    return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

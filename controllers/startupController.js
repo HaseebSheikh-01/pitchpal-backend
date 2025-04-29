@@ -12,7 +12,7 @@ exports.createStartup = async (req, res) => {
     industry,
     team_size,
     revenue_usd,
-    // image,
+    image,
   } = req.body;
 
   // Extract userId from the authenticated user's JWT token
@@ -45,7 +45,7 @@ exports.createStartup = async (req, res) => {
       industry,
       team_size,
       revenue_usd,
-      // image,
+      image,
       userId, // Set the userId as the owner of the startup
     });
 

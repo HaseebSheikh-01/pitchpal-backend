@@ -41,7 +41,6 @@ app.use("/auth", require("./routes/authRouter")); // Authentication routes (sign
 app.use("/api/users", require("./routes/userRouter")); // User profile and role management
 app.use("/api/startups", require("./routes/startupRouter")); // Startup routes (add, update, delete startups)
 app.use("/api/investors", require("./routes/investorRouter")); // Investor routes (create, get, update investors)
-app.use("/api/investor", require("./routes/investorRouter")); // Updated investor routes for matching
 
 // Test route
 app.get("/", (req, res) => {
