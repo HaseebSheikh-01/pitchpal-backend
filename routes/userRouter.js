@@ -6,4 +6,8 @@ const authMiddleware = require('../middleware/auth'); // Ensure the user is auth
 // PUT /api/users/:id/role - Update user role
 router.put('/:id/role', authMiddleware, userController.updateRole);
 
+// GET /api/users/:id - Get a user's details by ID
+router.get('/:id', authMiddleware, userController.getUserById);
+
+
 module.exports = router;

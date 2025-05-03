@@ -1,4 +1,3 @@
-// controllers/investorController.js
 const { Investor, Startup, User, Sequelize } = require('../models');
 
 // Helper function to convert array to string if needed
@@ -70,7 +69,7 @@ exports.getInvestors = async (req, res) => {
     const investors = await Investor.findAll({
       include: {
         model: User, // Include associated User data
-        attributes: ['id', 'full_name', 'email'], // Fetch only specific fields from User model
+        attributes: ['id', 'name', 'email'], // Assuming 'name' is the correct column
       },
     });
 
@@ -105,5 +104,44 @@ exports.matchStartupsByUserId = async (req, res) => {
   } catch (error) {
     console.error('Error matching startups:', error);
     return res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Get investor by userId
+exports.getInvestorByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Find the investor by the userId
+    const investor = await Investor.findOne({
+      where: { userId },
+      include: {
+        model: User, // Include associated User data
+        attributes: ['id', 'name', 'email'], // Change 'full_name' to 'name' (or correct column)
+      },
+    });
+
+    if (!investor) {
+      return res.status(404).json({ message: 'Investor not found' });
+    }
+
+    return res.status(200).json({
+      investor: {
+        id: investor.id,
+        full_name: investor.full_name,
+        company: investor.company,
+        position: investor.position,
+        funding_min: investor.funding_min,
+        funding_max: investor.funding_max,
+        industry: investor.industry,
+        area: investor.area,
+        type_of_startup: investor.type_of_startup,
+        team_size: investor.team_size,
+        email: investor.email, // from User
+      },
+    });
+  } catch (error) {
+    console.error('Error fetching investor by userId:', error.message);
+    return res.status(500).json({ error: 'Failed to fetch investor' });
   }
 };
