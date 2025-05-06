@@ -12,4 +12,7 @@ router.get('/investors', auth, investorController.getInvestors);
 // Route for matching startups by userId
 router.get('/:userId/match', auth, investorController.matchStartupsByUserId);
 
+router.get('/:userId', auth, investorController.getInvestorByUserId);
+
+
 module.exports = router;
