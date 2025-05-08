@@ -86,6 +86,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      // New field for Consumer Base
+      consumer_base: {
+        type: Sequelize.INTEGER,
+        allowNull: false,  // This field is mandatory
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -98,6 +103,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
+    // In case we want to rollback this migration, we will drop the Startups table
     await queryInterface.dropTable('Startups');
   },
 };

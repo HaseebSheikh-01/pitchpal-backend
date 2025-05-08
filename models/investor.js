@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     industry: {
-      type: DataTypes.ENUM,
+      type: DataTypes.STRING,
       values: [
         'Technology',
         'Healthcare',
@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     area: {
-      type: DataTypes.ENUM,
+      type: DataTypes.STRING,
       values: [
         'North America',
         'Europe',
@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     type_of_startup: {
-      type: DataTypes.ENUM,
+      type: DataTypes.STRING,
       values: [
         'Seed',
         'Early Stage',

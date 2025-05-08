@@ -1,9 +1,9 @@
-const { Investor, Startup, User, Sequelize } = require('../models');
+const { Investor, User, Startup, Sequelize } = require('../models'); // Ensure Startup is imported
 
 // Helper function to convert array to string if needed
 function parseEnumField(field) {
   if (Array.isArray(field)) {
-    return field[0]; // Take the first element if array
+    return field.join(", "); // Join the array into a string separated by commas
   }
   return field;
 }
@@ -89,14 +89,20 @@ exports.matchStartupsByUserId = async (req, res) => {
       return res.status(404).json({ message: 'Investor not found' });
     }
 
+    // Find startups matching ANY of the investor's preferences
+    const { Op } = require('sequelize');
     const startups = await Startup.findAll({
       where: {
-        funding_total_usd: {
-          [Sequelize.Op.between]: [investor.funding_min, investor.funding_max],
-        },
-        industry: investor.industry,
-        continent: investor.area,
-        stage_of_business: investor.type_of_startup,
+        [Op.or]: [
+          {
+            funding_total_usd: {
+              [Op.between]: [investor.funding_min, investor.funding_max],
+            },
+          },
+          { industry: investor.industry },
+          { continent: investor.area },
+          { stage_of_business: investor.type_of_startup },
+        ],
       },
     });
 
@@ -143,5 +149,53 @@ exports.getInvestorByUserId = async (req, res) => {
   } catch (error) {
     console.error('Error fetching investor by userId:', error.message);
     return res.status(500).json({ error: 'Failed to fetch investor' });
+  }
+};
+
+// Update an investor's details
+exports.updateInvestor = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const investor = await Investor.findOne({ where: { userId } });
+
+    if (!investor) {
+      return res.status(404).json({ message: 'Investor not found' });
+    }
+
+    let {
+      full_name,
+      location,
+      company,
+      position,
+      funding_min,
+      funding_max,
+      industry,
+      area,
+      type_of_startup,
+      team_size,
+    } = req.body;
+
+    // Update the investor fields
+    investor.full_name = full_name || investor.full_name;
+    investor.location = location || investor.location;
+    investor.company = company || investor.company;
+    investor.position = position || investor.position;
+    investor.funding_min = funding_min || investor.funding_min;
+    investor.funding_max = funding_max || investor.funding_max;
+    investor.industry = industry || investor.industry;
+    investor.area = area || investor.area;
+    investor.type_of_startup = type_of_startup || investor.type_of_startup;
+    investor.team_size = team_size || investor.team_size;
+
+    // Save the updated record
+    await investor.save();
+
+    return res.status(200).json({
+      message: 'Investor updated successfully',
+      investor,
+    });
+  } catch (error) {
+    console.error('Error updating investor:', error.message);
+    return res.status(500).json({ error: 'Failed to update investor' });
   }
 };

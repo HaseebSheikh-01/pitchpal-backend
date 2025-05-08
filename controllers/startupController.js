@@ -12,6 +12,7 @@ exports.createStartup = async (req, res) => {
     industry,
     team_size,
     revenue_usd,
+    consumer_base, // Added consumer_base to the request body
     image,
   } = req.body;
 
@@ -28,7 +29,8 @@ exports.createStartup = async (req, res) => {
     !stage_of_business ||
     !industry ||
     !team_size ||
-    !revenue_usd
+    !revenue_usd ||
+    !consumer_base // Added consumer_base to validation
   ) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
@@ -45,6 +47,7 @@ exports.createStartup = async (req, res) => {
       industry,
       team_size,
       revenue_usd,
+      consumer_base, // Store consumer base
       image,
       userId, // Set the userId as the owner of the startup
     });
@@ -96,6 +99,7 @@ exports.updateStartup = async (req, res) => {
     industry,
     team_size,
     revenue_usd,
+    consumer_base, // Added consumer_base to the update body
     image,
   } = req.body;
 
@@ -115,6 +119,7 @@ exports.updateStartup = async (req, res) => {
     startup.industry = industry || startup.industry;
     startup.team_size = team_size || startup.team_size;
     startup.revenue_usd = revenue_usd || startup.revenue_usd;
+    startup.consumer_base = consumer_base || startup.consumer_base; // Update consumer base
     startup.image = image || startup.image;
 
     await startup.save();
@@ -138,5 +143,31 @@ exports.deleteStartup = async (req, res) => {
     res.status(200).json({ message: 'Startup deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Error deleting startup', error: error.message });
+  }
+};
+
+// Get all Early Stage or Seed Stage startups
+exports.getEarlyOrSeedStageStartups = async (req, res) => {
+  try {
+    const { Startup } = require('../models');
+    const startups = await Startup.findAll({
+      where: {
+        stage_of_business: ['Early Stage', 'Seed']
+      }
+    });
+    return res.status(200).json({ startups });
+  } catch (error) {
+    console.error('Error fetching early/seed stage startups:', error);
+    return res.status(500).json({ message: 'Failed to fetch startups.' });
+  }
+};
+
+// GET - Get all startups (no user filter)
+exports.getAllStartupsPublic = async (req, res) => {
+  try {
+    const startups = await Startup.findAll();
+    res.status(200).json({ startups });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching all startups', error: error.message });
   }
 };

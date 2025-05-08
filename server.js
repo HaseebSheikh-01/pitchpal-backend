@@ -10,7 +10,7 @@ const app = express();
 
 // CORS options
 const corOptions = {
-  origin: "http://localhost:8081", // frontend URL (must match your frontend port)
+  origin: "http://192.168.31.181:8081", // frontend URL (must match your frontend port)
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"],
 };
@@ -41,7 +41,7 @@ app.use("/auth", require("./routes/authRouter")); // Authentication routes (sign
 app.use("/api/users", require("./routes/userRouter")); // User profile and role management
 app.use("/api/startups", require("./routes/startupRouter")); // Startup routes (add, update, delete startups)
 app.use("/api/investors", require("./routes/investorRouter")); // Investor routes (create, get, update investors)
-
+app.use("/api/mail", require("./routes/mailRoutes")); // Mail routes
 // Test route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to PitchPal API 🚀" });

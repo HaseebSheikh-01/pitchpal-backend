@@ -90,6 +90,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    // Consumer Base (new field)
+    consumer_base: {
+      type: DataTypes.INTEGER,
+      allowNull: false,  // Adjust this to true if you want to allow null values
+    },
   });
 
   // Associations

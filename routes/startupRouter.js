@@ -18,4 +18,10 @@ router.put('/:id', authMiddleware, startupController.updateStartup); // Protecte
 // DELETE - Delete a startup
 router.delete('/:id', authMiddleware, startupController.deleteStartup); // Protected route
 
+// GET - Get all Early Stage or Seed Stage startups
+router.get('/stage/early-or-seed', authMiddleware, startupController.getEarlyOrSeedStageStartups); // Protected route
+
+// GET - Get all startups (public, no auth)
+router.get('/all', startupController.getAllStartupsPublic);
+
 module.exports = router;
