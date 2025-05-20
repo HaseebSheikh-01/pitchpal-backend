@@ -93,7 +93,23 @@ module.exports = (sequelize, DataTypes) => {
     // Consumer Base (new field)
     consumer_base: {
       type: DataTypes.INTEGER,
-      allowNull: false,  // Adjust this to true if you want to allow null values
+      allowNull: false,
+    },
+    // New fields for tracking swipes and views
+    left_swipes: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    right_swipes: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    views: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
   });
 
